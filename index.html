@@ -7,17 +7,16 @@
         crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="assets/css/style.css">
     <script src="https://code.jquery.com/jquery.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/4.11.0/firebase.js"></script>
+   <!-- <script src="https://www.gstatic.com/firebasejs/4.11.0/firebase.js"></script> -->
     <title>Train Schedule</title>
 </head>
 
 <body>
 
-    <div class="jumbotron jumbotron-fluid">
+    <div class="jumbotron jumbotron-fluid" id="header">
         <div class="container">
             <h1 class="display-4">Train Schedule</h1>
             <p class="lead">Check to see when your train leaves. Add a train you want to track.</p>
-            <p id="time">The time is now: </p>
         </div>
     </div>
     <div class="container">
@@ -28,39 +27,12 @@
                 <th scope="col">Train</th>
                 <th scope="col">Destination</th>
                 <th scope="col">Frequency (min)</th>
-                <th scope="col">Next Arrival Time</th>
-                <th scope="col">Minutes Away</th>
+                <th scope="col">Next Arrival Time (in military rn)</th>
+                <th scope="col">Wait Time (min)</th>
             </tr>
         </thead>
         <tbody>
-            <tr>
-                <th scope="row">Cali Express</th>
-                <td>San Francisco</td>
-                <td>40</td>
-                <td>4:45 PM</td>
-                <td>15</td>
-            </tr>
-            <tr>
-                <th scope="row">Tokyo Express</th>
-                <td>Tokyo</td>
-                <td>15</td>
-                <td>5:00 PM</td>
-                <td>30</td>
-            </tr>
-            <tr>
-                <th scope="row">Santiago Micro</th>
-                <td>Larry</td>
-                <td>the Bird</td>
-                <td>@twitter</td>
-                <td>something</td>
-            </tr>
-            <tr>
-                <th scope="row">Valpo Metro</th>
-                <td>Larry</td>
-                <td>the Bird</td>
-                <td>@twitter</td>
-                <td>something else</td>
-            </tr>
+          
         </tbody>
     </table>
     <br>
@@ -82,9 +54,12 @@
             <label for="freq-input">Frequency (min)</label>
             <input type="number" class="form-control" id="freq-input" placeholder="45">
         </div>
-        <button type="submit" class="btn btn-primary" id="submit-btn">Submit</button>
     </form>
+    <button class="btn btn-primary" id="submit-btn">Submit</button>
+    <button id="new-btn">press me</button>
+    <div id="new-div"></div>
     </div>
+
 
 
     <script type="text/javascript" src="assets/js/app.js"></script>
