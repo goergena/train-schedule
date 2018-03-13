@@ -26,7 +26,7 @@ $(document).ready(function () {
     //the display grabs from the data to display.
     //this happens on submit and on page refresh. 
 
-    //currentTime();
+
     var trains = [{
             name: "Thomas the Tank Engine",
             destination: "Lazy Town",
@@ -40,39 +40,17 @@ $(document).ready(function () {
             frequency: 30,
         },
         {
-            name: "a",
-            destination: "b",
-            firstTime: "4:00",
-            frequency: 20,
+            name: "Tokyo Express",
+            destination: "Tokyo",
+            firstTime: "8:30",
+            frequency: 45,
         },
     ];
-/*
-    $("#new-btn").on("click", function(){
-        var secondDiv = $("<div>");
-        secondDiv.text("hey there");
-        $("#new-div").append(secondDiv);
-        var name = $("#name-input").val().trim();
-        var destination = $("#destination-input").val().trim();
-        var firstTime =  $("#first-input").val().trim();
-        var frequency = $("#freq-input").val().trim();
-
-        var newTrain = {
-            name: name,
-            destination: destination,
-            firstTime: firstTime,
-            frequency: frequency,
-        }; 
-        trains.push(newTrain);
-        console.log(newTrain); 
-        displayTrains();
-
-    }) */
 
     $("#submit-btn").on("click", function () {
         var name = $("#name-input").val().trim();
         var destination = $("#destination-input").val().trim();
-        var firstTime =  $("#first-input").val().trim();
-      //  console.log("hey first time " + firstTime);
+        var firstTime = $("#first-input").val().trim();
         var frequency = $("#freq-input").val().trim();
 
         var newTrain = {
@@ -80,16 +58,14 @@ $(document).ready(function () {
             destination: destination,
             firstTime: firstTime,
             frequency: frequency,
-        }; 
-        trains.push(newTrain);
-       // console.log(newTrain); 
-        displayTrains();
-    }); 
-  
+        };
 
+        trains.push(newTrain);
+        displayTrains();
+    });
 
     function displayTrains() {
-         $("tbody").empty();
+        $("tbody").empty();
         trains.forEach(function (train) {
             var row = $("<tr>");
             var head = $("<th scope='row'</th>");
@@ -103,27 +79,24 @@ $(document).ready(function () {
             var currentTime = calcTime();
             console.log(typeof currentTime);
             var nextArrivalInMin = calculateNextArrival(train.firstTime, train.frequency, currentTime);
-           // console.log(nextArrivalInMin);
+            // console.log(nextArrivalInMin);
             var nextArrivalConverted = timeConverter(nextArrivalInMin);
             console.log(nextArrivalConverted);
-            next.text(nextArrivalConverted); 
+            next.text(nextArrivalConverted);
             var wait = $("<td>");
-           wait.text(calcWait(nextArrivalInMin, currentTime)); 
+            wait.text(calcWait(nextArrivalInMin, currentTime));
+            
             row.append(head, dest, freq, next, wait);
-
             $("tbody").append(row);
         })
     };
 
     displayTrains();
 
-
     function calcTime() {
-
         var d = new Date();
         console.log(d.getHours() * 60 + d.getMinutes());
         return d.getHours() * 60 + d.getMinutes();
-
     }
 
     function calculateNextArrival(x, y, z) {
@@ -132,24 +105,16 @@ $(document).ready(function () {
         //z will be current Time
         var arr = x.split(":");
         var milHours = parseInt(arr[0]);
-        console.log(milHours + " this is hours");
         var milMin = parseInt(arr[1]);
         var firstInMin = milHours * 60 + milMin;
-        //console.log("first arrival:" + firstInMin);
-        console.log(typeof firstInMin);
-       // var currentFrequency = parseInt(y);
 
         while (firstInMin < z) {
             firstInMin += parseInt(y);
         };
         if (firstInMin >= z) {
             var nextArrival = firstInMin;
-            console.log(nextArrival);
-            console.log(typeof firstInMin);
-            
             return nextArrival;
         }
-
     };
 
     function calcWait(a, b) {
@@ -158,22 +123,25 @@ $(document).ready(function () {
 
     function timeConverter(z) {
         //z will be nextArrival
-
         var convertedHours = Math.floor(z / 60);
-        while (convertedHours>=24) {
-            convertedHours-=24;
-        }
+        while (convertedHours >= 24) {
+            convertedHours -= 24;
+        };
 
-        if (z < 60) {
-            convertedHours = "00";
-        }
         var convertedMinNum = z % 60;
-        if (z % 60 < 10) {
+        var convertedMin = convertedMinNum.toString();
+        if (convertedMin.length === 1) {
             convertedMin = "0" + convertedMinNum;
-            return convertedHours + ":" + convertedMin;
         }
-        return convertedHours + ":" + convertedMinNum;
+        if (convertedHours > 12) {
+            convertedHours-=12;
+            return convertedHours + ":" + convertedMin + " PM";
+        } else if(convertedHours ===0) {
+            convertedHours+=12;
+            return convertedHours + ":" + convertedMin + " AM";
+        } else {
+            return convertedHours + ":" + convertedMin + " AM";
+        }
     };
-    
 
 });
