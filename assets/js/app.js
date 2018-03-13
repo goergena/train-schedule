@@ -2,7 +2,7 @@ $(document).ready(function () {
 
 
     // Initialize Firebase
-    /* var config = {
+    var config = {
         apiKey: "AIzaSyAeSEQnspIfuu39mrcXEmVWVUeKe2GKcn8",
         authDomain: "train-schedule-1ec1e.firebaseapp.com",
         databaseURL: "https://train-schedule-1ec1e.firebaseio.com",
@@ -13,7 +13,7 @@ $(document).ready(function () {
     firebase.initializeApp(config);
 
     var database = firebase.database();
-    */
+    
 
     //okay i thik im going to have an array of objects and then
     //do a for loop to add each one to the database
@@ -27,7 +27,7 @@ $(document).ready(function () {
     //this happens on submit and on page refresh. 
 
 
-    var trains = [{
+  /*  var trains = [{
             name: "Thomas the Tank Engine",
             destination: "Lazy Town",
             firstTime: "8:00",
@@ -47,6 +47,7 @@ $(document).ready(function () {
         },
     ];
 
+/*
     $("#submit-btn").on("click", function () {
         var name = $("#name-input").val().trim();
         var destination = $("#destination-input").val().trim();
@@ -62,7 +63,73 @@ $(document).ready(function () {
 
         trains.push(newTrain);
         displayTrains();
+    }); */
+
+    $("#submit-btn").on("click", function () {
+        event.preventDefault();
+        var name = $("#name-input").val().trim();
+        var destination = $("#destination-input").val().trim();
+        var firstTime = $("#first-input").val().trim();
+        var frequency = $("#freq-input").val().trim();
+
+        database.ref().update({
+            name: name,
+            destination: destination,
+            firstTime: firstTime,
+            frequency: frequency,
+        });
+
+        
     });
+
+    database.ref().on("value", function(snapshot) {
+        var data = snapshot.val();
+        displayTrains(data);
+  
+  
+        // If any errors are experienced, log them to console.
+      }, function(errorObject) {
+        console.log("The read failed: " + errorObject.code);
+      });
+
+   /* trains.forEach(function(item) {
+        database.ref().update({
+            name: item.name,
+            destination: item.destination,
+            firstTime: item.firstTime,
+            frequency: item.frequency,  
+        })
+        
+    }); */
+
+    function displayTrains(train) {
+      
+            var row = $("<tr>");
+            var head = $("<th scope='row'</th>");
+            head.text(train.name);
+            var dest = $("<td>");
+            dest.text(train.destination);
+            var freq = $("<td>");
+            freq.text(train.frequency);
+            var next = $("<td>");
+            //calculateNextArrival(train.firstTime, train.frequency);
+            var currentTime = calcTime();
+            console.log(typeof currentTime);
+            var nextArrivalInMin = calculateNextArrival(train.firstTime, train.frequency, currentTime);
+            // console.log(nextArrivalInMin);
+            var nextArrivalConverted = timeConverter(nextArrivalInMin);
+            console.log(nextArrivalConverted);
+            next.text(nextArrivalConverted);
+            var wait = $("<td>");
+            wait.text(calcWait(nextArrivalInMin, currentTime));
+            
+            row.append(head, dest, freq, next, wait);
+            $("tbody").append(row);
+        
+    };
+
+   // displayTrains();
+    /*
 
     function displayTrains() {
         $("tbody").empty();
@@ -91,7 +158,7 @@ $(document).ready(function () {
         })
     };
 
-    displayTrains();
+    displayTrains(); */
 
     function calcTime() {
         var d = new Date();
